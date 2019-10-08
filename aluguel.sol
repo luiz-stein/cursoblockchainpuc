@@ -45,5 +45,13 @@ contract Aluguel
         
         return valor_da_multa;
     }
+    
+    function ReajusteAluguel( uint256 percentual_reajuste) public
+    {
+        uint256 valor_do_acrescimo=0;
+        valor_do_acrescimo = (valor*percentual_reajuste)/100;
+        valor = valor + valor_do_acrescimo;
+    }
+    
 }
 
