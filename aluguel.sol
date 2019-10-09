@@ -53,5 +53,9 @@ contract Aluguel
         valor = valor + valor_do_acrescimo;
     }
     
+    function AditamentoValorAluguel(uint256 valor_certo) public
+    {
+        valor = valor_certo;
+    }
 }
 
