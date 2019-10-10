@@ -2,7 +2,7 @@ pragma solidity 0.5.12;
 
 contract SolicitacaoReajusteDePreco
 {
-    string public status;
+    string public status = "Negado";
     uint256 public valor_solicitado_mercadoria;
     uint256 public valor_da_mercadoria = 2 ;
     uint256 public data_vigencia;
