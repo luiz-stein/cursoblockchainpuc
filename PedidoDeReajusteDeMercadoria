@@ -4,7 +4,7 @@ contract SolicitacaoReajusteDePreco
 {
     uint256 public valor_solicitado_mercadoria;
     uint256 public valor_da_mercadoria;
-    uint256 private data_vigencia;
+    uint256 public data_vigencia;
     uint256 data_do_pedido_reajuste;
     uint256 data_entrega_material;
     
@@ -25,6 +25,7 @@ contract SolicitacaoReajusteDePreco
         
         uint8[] memory requisitos = new uint8[](2);
         
+        // definicao das regras
         
         if ( (data_entrega_material - data_do_pedido_reajuste ) < 30 )
         {
@@ -42,6 +43,8 @@ contract SolicitacaoReajusteDePreco
             requisitos[0] = 1;
         }
         
+        // limite do valor negociado
+        
         if ( valor_solicitado_mercadoria <= 5 )
         {
            requisitos[1] = 1;    
@@ -52,6 +55,7 @@ contract SolicitacaoReajusteDePreco
         }
         
         uint8 resultado_dos_requisitos = 1;
+        
         
         for (uint8 i = 0; i < 2; i++ )
         {
