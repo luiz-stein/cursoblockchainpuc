@@ -2,12 +2,16 @@ pragma solidity 0.5.12;
 
 contract SolicitacaoReajusteDePreco
 {
+    string public status;
     uint256 public valor_solicitado_mercadoria;
-    uint256 public valor_da_mercadoria;
+    uint256 public valor_da_mercadoria = 2 ;
     uint256 public data_vigencia;
     uint256 data_do_pedido_reajuste;
     uint256 data_entrega_material;
     
+    
+    uint8 constant requisito_data = 0;
+    uint8 constant requisito_preco = 1;
     
     constructor( uint256 ano_mes_dia_pedido_reajuste, uint256 ano_mes_dia_entrega_material, uint256 novo_preco ) public
     {
@@ -18,7 +22,7 @@ contract SolicitacaoReajusteDePreco
     
     //
     
-    function AvaliarRequisitos(uint8 tem_instrucao, uint8 tem_solicitacao ) public returns(string memory resultado)
+    function AvaliarRequisitos(uint8 tem_instrucao, uint8 tem_solicitacao ) public
     {
         require( tem_solicitacao == 1, "Não tem solicitação");
         require( data_entrega_material > data_do_pedido_reajuste, "Pedido não pode ser menor que data de reajuste");
@@ -31,31 +35,32 @@ contract SolicitacaoReajusteDePreco
         {
             if (tem_instrucao == 0 )
             {
-                requisitos[0] = 0;
+                requisitos[requisito_data] = 0;
             }
             else
             {
-                requisitos[0] = 1;
+                requisitos[requisito_data] = 1;
             }
         }
         else
         {
-            requisitos[0] = 1;
+            requisitos[requisito_data] = 1;
         }
         
         // limite do valor negociado
         
         if ( valor_solicitado_mercadoria <= 5 )
         {
-           requisitos[1] = 1;    
+           requisitos[requisito_preco] = 1;    
         }
         else
         {
-            requisitos[1] = 0;
+            requisitos[requisito_preco] = 0;
         }
         
         uint8 resultado_dos_requisitos = 1;
         
+        // calculo dos resultatos, sendo igual a 1 esta Aprovado
         
         for (uint8 i = 0; i < 2; i++ )
         {
@@ -64,17 +69,16 @@ contract SolicitacaoReajusteDePreco
         
         if (resultado_dos_requisitos == 1)
         {
-            resultado = "Aprovado";
+            status = "Aprovado";
             
             valor_da_mercadoria = valor_solicitado_mercadoria;
-            data_vigencia = data_do_pedido_reajuste;
+            data_vigencia = data_entrega_material;
         }
         else
         {
-            resultado = "Negado";
+            status = "Negado";
         }
         
-        return( resultado );
     }
 
 }
