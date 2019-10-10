@@ -15,7 +15,7 @@ contract SolicitacaoReajusteDePreco
     
     constructor( uint256 ano_mes_dia_pedido_reajuste, uint256 ano_mes_dia_entrega_material, uint256 novo_preco ) public
     {
-        require( data_entrega_material > data_do_pedido_reajuste, "Pedido não pode ser menor que data de reajuste");
+        require( ano_mes_dia_entrega_material > ano_mes_dia_pedido_reajuste, "Pedido não pode ser menor que data de reajuste");
 
         valor_solicitado_mercadoria = novo_preco;
         data_do_pedido_reajuste = ano_mes_dia_pedido_reajuste;
