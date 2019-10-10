@@ -3,7 +3,8 @@ pragma solidity 0.5.12;
 contract SolicitacaoReajusteDePreco
 {
     uint256 public valor_solicitado_mercadoria;
-    uint256 private valor_da_mercadoria;
+    uint256 public valor_da_mercadoria;
+    uint256 private data_vigencia;
     uint256 data_do_pedido_reajuste;
     uint256 data_entrega_material;
     
@@ -17,17 +18,17 @@ contract SolicitacaoReajusteDePreco
     
     //
     
-    function AvaliarRequisitos(byte tem_instrucao, byte tem_solicitacao ) public returns(string memory resultado)
+    function AvaliarRequisitos(uint8 tem_instrucao, uint8 tem_solicitacao ) public returns(string memory resultado)
     {
-        require( tem_solicitacao == "s", "Não tem solicitação");
+        require( tem_solicitacao == 1, "Não tem solicitação");
         require( data_entrega_material > data_do_pedido_reajuste, "Pedido não pode ser menor que data de reajuste");
         
         uint8[] memory requisitos = new uint8[](2);
-        uint8 resultado_dos_requisitos = 1;
+        
         
         if ( (data_entrega_material - data_do_pedido_reajuste ) < 30 )
         {
-            if (tem_instrucao == "n" )
+            if (tem_instrucao == 0 )
             {
                 requisitos[0] = 0;
             }
@@ -41,6 +42,33 @@ contract SolicitacaoReajusteDePreco
             requisitos[0] = 1;
         }
         
+        if ( valor_solicitado_mercadoria <= 5 )
+        {
+           requisitos[1] = 1;    
+        }
+        else
+        {
+            requisitos[1] = 0;
+        }
+        
+        uint8 resultado_dos_requisitos = 1;
+        
+        for (uint8 i = 0; i < 2; i++ )
+        {
+            resultado_dos_requisitos = resultado_dos_requisitos * requisitos[i];
+        }
+        
+        if (resultado_dos_requisitos == 1)
+        {
+            resultado = "Aprovado";
+            
+            valor_da_mercadoria = valor_solicitado_mercadoria;
+            data_vigencia = data_do_pedido_reajuste;
+        }
+        else
+        {
+            resultado = "Negado";
+        }
         
         return( resultado );
     }
