@@ -1,0 +1,48 @@
+pragma solidity 0.5.12;
+
+contract SolicitacaoReajusteDePreco
+{
+    uint256 public valor_solicitado_mercadoria;
+    uint256 private valor_da_mercadoria;
+    uint256 data_do_pedido_reajuste;
+    uint256 data_entrega_material;
+    
+    
+    constructor( uint256 ano_mes_dia_pedido_reajuste, uint256 ano_mes_dia_entrega_material, uint256 novo_preco ) public
+    {
+        valor_solicitado_mercadoria = novo_preco;
+        data_do_pedido_reajuste = ano_mes_dia_pedido_reajuste;
+        data_entrega_material = ano_mes_dia_entrega_material;
+    }
+    
+    //
+    
+    function AvaliarRequisitos(byte tem_instrucao, byte tem_solicitacao ) public returns(string memory resultado)
+    {
+        require( tem_solicitacao == "s", "Não tem solicitação");
+        require( data_entrega_material > data_do_pedido_reajuste, "Pedido não pode ser menor que data de reajuste");
+        
+        uint8[] memory requisitos = new uint8[](2);
+        uint8 resultado_dos_requisitos = 1;
+        
+        if ( (data_entrega_material - data_do_pedido_reajuste ) < 30 )
+        {
+            if (tem_instrucao == "n" )
+            {
+                requisitos[0] = 0;
+            }
+            else
+            {
+                requisitos[0] = 1;
+            }
+        }
+        else
+        {
+            requisitos[0] = 1;
+        }
+        
+        
+        return( resultado );
+    }
+
+}
