@@ -27,6 +27,7 @@ contract SolicitacaoReajusteDePreco
     function AvaliarRequisitos(uint8 tem_instrucao, uint8 tem_solicitacao ) public
     {
         require( tem_solicitacao == 1, "Não tem solicitação");
+        require( tem_instrucao >= 0 && tem_instrucao <= 1 , "Não tem solicitação");
         
         uint8[] memory requisitos = new uint8[](2);
         
