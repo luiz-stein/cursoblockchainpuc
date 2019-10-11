@@ -1,67 +1,94 @@
-/*
-(c) Desenvolvido por Jeff Prestes
-This work is licensed under a Creative Commons Attribution 4.0 International License.
-*/
 pragma solidity 0.5.12;
 
-contract Aluguel 
+/*
+
+- não ha decimais em solidity
+- uint256 = uint (inteiros) em bytes
+- address = endereco ethereum
+- constant = constante
+- memory = informa o compilador para nao armazenar no blockchain
+- view =  use view if your function does not modify storage
+
+*/
+
+contract Aluguel
 {
     string public locatario;
     string public locador;
     uint256 private valor;
-    uint256 constant public numeroMaximoLegalDeAlgueisParaMulta = 3;
     bool[] public statusPagamento;
     address payable public contaLocatario;
-
-    constructor(string memory nomeLocador, string memory nomeLocatario, address payable paramContaLocatario, uint256 valorDoAluguel) public 
+    
+    uint8 constant numero_maximo_legal_de_alugueis_para_multa = 3;
+    
+    //
+    
+    constructor( string memory nome_do_locador, string memory nome_do_locatario, uint256 valor_do_aluguel, address payable paramContaLocatario ) public
     {
-        locador = nomeLocador;
-        locatario = nomeLocatario;
-        valor = valorDoAluguel;
-        contaLocatario = paramContaLocatario;
+        locador = nome_do_locador;
+        locatario = nome_do_locatario;
+        valor = valor_do_aluguel;
+        contaLocatario=paramContaLocatario;
     }
- 
-    function valorAtualDoAluguel() public view returns (uint256) 
+    
+    //
+    
+    function ValorAtualDoAluguel() public view returns(uint256)
     {
         return valor;
     }
- 
-    function simulaMulta( uint256 mesesRestantes, uint256 totalMesesContrato) public view returns(uint256 valorMulta) 
+    
+    //
+    
+    function SimulaMulta( uint256 meses_restantes, uint256 valor_meses_do_contrato) public view returns(uint256 valor_da_multa)
     {
-        valorMulta = valor*numeroMaximoLegalDeAlgueisParaMulta;
-        valorMulta = valorMulta/totalMesesContrato;
-        valorMulta = valorMulta*mesesRestantes;
-        return valorMulta;
-    } 
+        valor_da_multa = valor * numero_maximo_legal_de_alugueis_para_multa;
+        valor_da_multa = valor_da_multa / valor_meses_do_contrato;
+        valor_da_multa = valor_da_multa * meses_restantes;
         
-    function reajustaAluguel(uint256 percentualReajuste) public 
+        return valor_da_multa;
+    }
+    
+    //
+    
+    function ReajusteAluguel( uint256 percentual_reajuste) public
     {
-        if (percentualReajuste > 20) 
+        if (percentual_reajuste > 20)
         {
-            percentualReajuste = 20;
+            percentual_reajuste = 20;
         }
-        uint256 valorDoAcrescimo = 0;
-        valorDoAcrescimo = ((valor*percentualReajuste)/100);
-        valor = valor + valorDoAcrescimo;
+        
+        uint256 valor_do_acrescimo=0;
+        valor_do_acrescimo = (valor*percentual_reajuste)/100;
+        valor = valor + valor_do_acrescimo;
     }
     
-    function aditamentoValorAluguel(uint256 valorCerto) public
+    //
+    
+    function AditamentoValorAluguel(uint256 valor_certo) public
     {
-        valor = valorCerto;
+        valor = valor_certo;
     }
-
-    function aplicaMulta(uint256 mesesRestantes, uint256 percentual) public
+    
+    //
+    
+    function AplicaMulta(uint256 meses_restantes, uint256 percentual) public
     {
-        require(mesesRestantes<30, "Periodo de contrato inválido");
-        for (uint i=1; i<mesesRestantes; i++) {
-            valor = valor+((valor*percentual)/100);
+        require( meses_restantes < 30, "Periodo de contrato invalido");
+        
+        for (uint256 i=1; i<meses_restantes; i++)
+        {
+            valor = valor + ((valor*percentual)/100);
         }
     }
     
-    function receberPagamento() public payable {
+    function receberPagamento() public payable 
+    {
+        // não esquecer de usar duas contas e preencher o valor de VALUE
+        
         require(msg.value>=valor, "Valor insuficiente");
         contaLocatario.transfer(msg.value);
         statusPagamento.push(true);
     }
-    
 }
+
