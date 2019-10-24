@@ -38,16 +38,27 @@ contract Owned
 
 contract Mortal is Owned  
 {
-    function kill() public {
+    function kill() public 
+    {
+        require( msg.sender == contractOwner, "somente o dono do conrato pode encerra-lo" );
+        
+        selfdestruct(contractOwner);
+        
+        /*    
         if (msg.sender == contractOwner) {
             selfdestruct(contractOwner);
         }
+        */
     }
 }
 
 //heranca
 // pra publicar usar a rede injectweb3
-contract TicketERC20 is ERC20Interface, Mortal {
+// o token tem este padrao
+// tem duas herancas
+
+contract TicketERC20 is ERC20Interface, Mortal 
+{
     string private myName;
     string private mySymbol;
     uint private myTotalSupply;
