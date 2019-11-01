@@ -12,20 +12,7 @@ contract ProjetoMouse
     uint256 private saldoTerceiro;
     bool private sinalPago;
     bool private produtoFoiAprovado;
-    /*
-    constructor () public
-    {
-        nomeCliente = "Empresa Mouse";
-        addressCliente = 0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C;
-        addressTerceiro =0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB;
-        addressEmpresa = msg.sender;
-        
-        nomeProjeto = "Projeto Mouse Sem Rabo";
-        valorProjeto = 2 ether;
-    }
-    */
-    
-    
+
     constructor ( string memory cliente, 
                   address payable conta_cliente,
                   string memory nome_do_projeto,
@@ -41,13 +28,28 @@ contract ProjetoMouse
         valorProjeto = valor_em_ether * 1 ether;
     }
     
+     /* liberar para teste
+    constructor () public
+    {
+        nomeCliente = "Empresa Mouse";
+        addressCliente = 0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C;
+        addressTerceiro =0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB;
+        addressEmpresa = msg.sender;
+        
+        nomeProjeto = "Projeto Mouse Sem Rabo";
+        valorProjeto = 2 ether;
+    }
+    */
     
-    
+    //funcoes admninistrativas
     function DescricaoProjeto() public view returns( string memory cliente, 
                                                      string memory nome_do_projeto,
                                                      uint256 valor_do_projeto_em_ether)
     {
-        return((cliente = nomeCliente), nome_do_projeto = nomeProjeto, valor_do_projeto_em_ether = ( valorProjeto/(1 ether) ) );
+        return(
+                cliente = nomeCliente, 
+                nome_do_projeto = nomeProjeto, 
+                valor_do_projeto_em_ether = ( valorProjeto/(1 ether) ) );
     }
     
     function ContaCliente() public view returns(address conta)
@@ -84,7 +86,7 @@ contract ProjetoMouse
         addressTerceiro.transfer( address(this).balance / 2 );
     }
     
-    //
+    // aprovacao e encerraamento de contrato
     
     function ProdutoAprovado() public payable somenteTransacaoCliente sinalFoiDepositado
     {
