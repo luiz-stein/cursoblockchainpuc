@@ -24,7 +24,7 @@ contract ProjetoMouse
         addressTerceiro = conta_terceiro;
         addressEmpresa = msg.sender;
         
-        nomeCliente = nome_do_projeto;
+        nomeProjeto = nome_do_projeto;
         valorProjeto = valor_em_ether * 1 ether;
     }
     
